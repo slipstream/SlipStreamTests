@@ -1,4 +1,4 @@
-(ns sixsq.slipstream.athn-test
+(ns sixsq.slipstream.authn-test
   (:require [clojure.test :refer :all]
             [clojure.test.junit :refer :all]
             [clojure.string :refer [starts-with?]]
