@@ -18,8 +18,11 @@ and can be used.
 2. To run the tests
 
 ```
+export TIMBRE_NS_BLACKLIST='["kvlt.*"]'
 boot test
 ```
+
+NB! The export disables logging from HTTP framework.
 
 3. Tests results as junit XML files can be found under `target/` directory.
 
