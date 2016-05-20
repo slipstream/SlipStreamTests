@@ -26,6 +26,7 @@
     [adzerk/boot-reload "0.4.5" :scope "test"]
     [tolitius/boot-check "0.1.1" :scope "test"]
     [sixsq/boot-deputil "0.2.2" :scope "test"]
+    [com.cemerick/url "0.1.1" :scope "test"]
     [com.sixsq.slipstream/SlipStreamClientAPI-jar "3.4-SNAPSHOT" :scope "test"]])
 
 (require
