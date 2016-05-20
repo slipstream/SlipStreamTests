@@ -15,7 +15,6 @@
 
 (set-env!
   :source-paths #{"test" "resources"}
-  ;:resource-paths #{"src/clj" "src/cljc" "src/cljs"}
 
   :repositories
   #(reduce conj % [["sixsq" {:url (sixsq-repo (get-env :version) (get-env :edition))}]])
