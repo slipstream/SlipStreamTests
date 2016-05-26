@@ -18,6 +18,12 @@
 (def serviceurl (:serviceurl config))
 (def app-uri (:app-uri config))
 (def comp-name (:comp-name config))
+(def connector-name (:connector-name config))
+
+(def deploy-params-map
+  (-> {:scalable                       true
+       (str comp-name ":multiplicity") 0}
+      (cond-> connector-name (assoc (str comp-name ":cloudservice") connector-name))))
 
 (def ^:dynamic *run-uuid* nil)
 (defn set-run-uuid
@@ -74,8 +80,7 @@
       ))
 
   (testing "Start scalable run."
-    (let [run-url (p/deploy app-uri {:scalable                       true
-                                     (str comp-name ":multiplicity") 0})]
+    (let [run-url (p/deploy app-uri deploy-params-map)]
       (is (is-url run-url))
       (let [run-uuid (run-uuid-from-run-url run-url)]
         (is (is-uuid run-uuid))

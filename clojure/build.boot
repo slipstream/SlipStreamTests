@@ -21,8 +21,8 @@
 
   :dependencies
   '[[org.clojure/clojure "1.8.0" :scope "provided"]
-    [adzerk/boot-test "1.1.0" :scope "test"]
-    [adzerk/boot-reload "0.4.5" :scope "test"]
+    [adzerk/boot-test "1.1.1" :scope "test"]
+    [adzerk/boot-reload "0.4.8" :scope "test"]
     [tolitius/boot-check "0.1.1" :scope "test"]
     [sixsq/boot-deputil "0.2.2" :scope "test"]
     [com.cemerick/url "0.1.1" :scope "test"]

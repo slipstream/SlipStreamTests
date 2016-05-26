@@ -4,4 +4,5 @@
  :serviceurl "CHANGEME_SERVICEURL"
  :app-uri "CHANGEME_APP_URI"
  :comp-name "CHANGEME_COMP_NAME"
+ :connector-name "CHANGEME_CONNECTOR_NAME"
  }
