@@ -1,6 +1,5 @@
-(ns sixsq.slipstream.run-test
+(ns sixsq.slipstream.run-app-scale-test
   (:require [clojure.test :refer :all]
-            [clojure.test.junit :refer :all]
             [clojure.string :refer [starts-with?]]
             [cemerick.url :refer [url]]
             [sixsq.slipstream.test-base :refer [get-config]]
@@ -113,6 +112,7 @@
 
   (testing "Terminate deployment."
     (is (= 204 (:status (r/terminate))))
+    ;; TODO: (is (true? (r/wait-done)))
     )
   )
 
