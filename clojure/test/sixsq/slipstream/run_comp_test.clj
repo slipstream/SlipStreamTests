@@ -59,8 +59,8 @@
 ;; Fixtures.
 (defn fixture-terminate [f]
   (f)
-  (if-not (nil? *run-uuid*) (lr/terminate *run-uuid*))
-  )
+  (if-not (nil? *run-uuid*)
+    (try (lr/terminate *run-uuid*) (catch Exception _))))
 
 (use-fixtures :each fixture-terminate)
 
