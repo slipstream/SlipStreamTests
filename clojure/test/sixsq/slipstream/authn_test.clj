@@ -2,8 +2,10 @@
   (:require [clojure.test :refer :all]
             [clojure.test.junit :refer :all]
             [clojure.string :refer [starts-with?]]
-            [sixsq.slipstream.test-base :refer [get-config]]
+            [sixsq.slipstream.test-base :refer [get-config http-quiet!]]
             [sixsq.slipstream.client.api.authn :as a]))
+
+(http-quiet!)
 
 (def config (get-config))
 (def username (:username config))
