@@ -17,7 +17,6 @@
 (def password (:password config))
 (def serviceurl (:serviceurl config))
 (def comp-uri (:comp-uri config))
-(def comp-name "machine")
 (def connector-name (:connector-name config))
 (def insecure (:insecure? config))
 
