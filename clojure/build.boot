@@ -24,7 +24,7 @@
                  '[[org.clojure/clojure]
                    [org.clojure/clojurescript]
 
-                   [com.cemerick/url "0.1.1" :scope "test"]
+                   [com.cemerick/url nil :scope "test"]
                    [com.sixsq.slipstream/SlipStreamClientAPI-jar :version :scope "test"]
 
                    [adzerk/boot-test]
