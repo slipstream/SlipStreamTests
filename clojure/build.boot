@@ -1,4 +1,4 @@
-(def +version+ "3.9-SNAPSHOT")
+(def +version+ "3.10-SNAPSHOT")
 
 (set-env!
   :project 'com.sixsq.slipstream/SlipStreamTests-clj
@@ -26,7 +26,7 @@
 
                    [com.cemerick/url "0.1.1" :scope "test"]
                    [com.sixsq.slipstream/SlipStreamClientAPI-jar :version :scope "test"]
-                   
+
                    [adzerk/boot-test]
                    [adzerk/boot-reload]
                    [tolitius/boot-check]]))))
