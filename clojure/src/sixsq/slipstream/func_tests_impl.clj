@@ -131,13 +131,13 @@
 
 (boot/deftask func-test-pre
   "Run before SlipStream functional tests."
-  [_ serviceurl SERVICEURL str "SlipStream endpoint."
-   _ username USERNAME str "SlipStream username."
-   _ password PASSWORD str "SlipStream password."
-   _ app-uri APPURI str "Application URI (for deploying app and scaling)."
-   _ comp-name COMPNAME str "Component name (for scalable tests)."
-   _ comp-uri COMPURI str "Component URI (for deploying component)."
-   _ connector-name CONNECTOR str "Connector name."]
+  [_ serviceurl SERVICEURL str "SlipStream endpoint"
+   _ username USERNAME str "SlipStream username"
+   _ password PASSWORD str "SlipStream password"
+   _ app-uri APPURI str "Application URI (for deploying app and scaling)"
+   _ comp-name COMPNAME str "Component name (for scalable tests)"
+   _ comp-uri COMPURI str "Component URI (for deploying component)"
+   _ connector-name CONNECTOR str "Connector name"]
   (fn middleware [next-task]
       (fn handler [fileset]
         (write-config *opts* test-conf-filename fileset)
@@ -145,9 +145,9 @@
 
 (boot/deftask func-test-post
   "Run after SlipStream functional tests."
-  [_ results-dir RESULTSDIR str "Directory where to copy test results to."
-   _ connector-name CONNECTOR str "Connector name."
-   _ junit-output-to JUNITOUT str "The directory where a junit formatted report was generated."]
+  [_ results-dir RESULTSDIR str "Output directory for test results"
+   _ connector-name CONNECTOR str "Connector name"
+   _ junit-output-to JUNITOUT str "Output directory for junit formatted reports for each namespace"]
   (fn middleware [next-task]
     (fn handler [fileset]
       (if-not (s/blank? results-dir)
