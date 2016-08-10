@@ -32,15 +32,21 @@
                    [tolitius/boot-check]]))))
 
 (set-env!
+  :resource-paths #{"src"}
   :source-paths #{"test" "resources"})
 
 (require
   '[adzerk.boot-test :refer [test]]
+  '[sixsq.slipstream.func-tests :refer [func-test]]
   '[adzerk.boot-reload :refer [reload]]
   '[tolitius.boot-check :refer [with-yagni with-eastwood with-kibit with-bikeshed]])
+
+(def test-opts {:exclusions '#{sixsq.slipstream.test-base}
+                :junit-output-to ""})
 
 (task-options!
   pom {:project (get-env :project)
        :version (get-env :version)}
-  test {:exclusions '#{sixsq.slipstream.test-base}
-        :junit-output-to ""})
+  test test-opts
+  func-test test-opts)
+
