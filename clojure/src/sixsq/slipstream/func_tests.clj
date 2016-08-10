@@ -17,6 +17,35 @@
             [sixsq.slipstream.func-tests-impl :as ft]
             [adzerk.boot-test :as btest]))
 
+(defn- pre-test-post
+  ([opts]
+    (pre-test-post opts nil))
+  ([opts connector]
+    (conj []
+       (ft/func-test-pre :endpoint (:endpoint opts)
+                         :username (:username opts)
+                         :password (:password opts)
+                         :app-uri (:app-uri opts)
+                         :comp-name (:comp-name opts)
+                         :comp-uri (:comp-uri opts)
+                         :connector-name connector)
+       (btest/test :namespaces (:namespaces opts)
+                   :exclusions (:exclusions opts)
+                   :filters (:filters opts)
+                   :requires (:requires opts)
+                   :junit-output-to (:junit-output-to opts))
+       (ft/func-test-post :results-dir (ft/results-loc (:results-dir opts) connector)
+                          :connector-name connector
+                          :junit-output-to (:junit-output-to opts)))))
+
+(defn- gen-tasks
+  [opts]
+  (if (empty? (:connectors opts))
+    (pre-test-post opts)
+    (mapcat identity
+      (for [c (:connectors opts)]
+        (pre-test-post opts c)))))
+
 (boot/deftask func-test
   "SlipStream functional tests.
 
@@ -46,23 +75,5 @@
    j junit-output-to JUNITOUT str "Output directory for junit formatted reports for each namespace"
    ; func-test-post
    d results-dir RESULTSDIR str "Output directory for test results"]
-  (let [tasks (mapcat identity
-                (for [c connectors]
-                  (conj []
-                        (ft/func-test-pre :serviceurl endpoint
-                                          :username username
-                                          :password password
-                                          :app-uri app-uri
-                                          :comp-name comp-name
-                                          :comp-uri comp-uri
-                                          :connector-name c)
-                        (btest/test :namespaces namespaces
-                                    :exclusions exclusions
-                                    :filters filters
-                                    :requires requires
-                                    :junit-output-to junit-output-to)
-                        (ft/func-test-post :results-dir (ft/results-loc results-dir c)
-                                           :connector-name c
-                                           :junit-output-to junit-output-to))))]
-    (apply comp tasks)))
+   (apply comp (gen-tasks *opts*)))
 

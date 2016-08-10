@@ -137,7 +137,7 @@
 
 (boot/deftask func-test-pre
   "Run before SlipStream functional tests."
-  [_ serviceurl SERVICEURL str "SlipStream endpoint"
+  [_ endpoint ENDPOINT str "SlipStream endpoint"
    _ username USERNAME str "SlipStream username"
    _ password PASSWORD str "SlipStream password"
    _ app-uri APPURI str "Application URI (for deploying app and scaling)"

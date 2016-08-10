@@ -1,8 +1,9 @@
 {
  :username "CHANGEME_USER"
  :password "CHANGEME_PASS"
- :serviceurl "CHANGEME_SERVICEURL"
+ :endpoint "CHANGEME_ENDPOINT"
  :app-uri "CHANGEME_APP_URI"
  :comp-name "CHANGEME_COMP_NAME"
  :connector-name "CHANGEME_CONNECTOR_NAME"
  }
+
