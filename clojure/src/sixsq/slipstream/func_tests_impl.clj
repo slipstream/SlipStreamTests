@@ -83,17 +83,18 @@
 
 (defn attr-editor
   [attr-name prep-val node]
-  (let [package-name (-> node :attrs attr-name)
-        new-content (assoc (:attrs node) attr-name (format "%s.%s" prep-val package-name))]
+  (let [an (keyword attr-name)
+        package-name (-> node :attrs an)
+        new-content (assoc (:attrs node) an (format "%s.%s" prep-val package-name))]
     (assoc node :attrs new-content)))
 
 (defn package-editor
   [prep-val node]
-  (attr-editor :package prep-val node))
+  (attr-editor "package" prep-val node))
 
 (defn classname-editor
   [prep-val node]
-  (attr-editor :classname prep-val node))
+  (attr-editor "classname" prep-val node))
 
 (defn tree-edit
   "Take a zipper, a function that matches a pattern in the tree,
@@ -110,16 +111,21 @@
             (recur (zip/next new-loc))))
         (recur (zip/next loc))))))
 
+(defn update-test-meta-xml-str
+  [xml-str cname]
+  (-> xml-str
+    xml/parse-str
+    zip/xml-zip
+    (tree-edit match-testsuite? (partial package-editor cname))
+    zip/xml-zip
+    (tree-edit match-testcase? (partial classname-editor cname))
+    xml/indent-str))
+
 (defn update-test-meta
   [filename cname]
   (let [s (-> filename
               slurp
-              xml/parse-str
-              zip/xml-zip
-              (tree-edit match-testsuite? (partial package-editor cname))
-              zip/xml-zip
-              (tree-edit match-testcase? (partial classname-editor cname))
-              xml/indent-str)]
+              (update-test-meta-xml-str cname))]
     (spit filename s)))
 
 (defn test-file-copy-update
