@@ -104,7 +104,7 @@
   (loop [loc zipper]
     (if (zip/end? loc)
       (zip/root loc)
-      (if-let [matcher-result (matcher loc)]
+      (if (matcher loc)
         (let [new-loc (zip/edit loc editor)]
           (if (not (= (zip/node new-loc) (zip/node loc)))
             (recur (zip/next new-loc))))
