@@ -38,6 +38,7 @@
    _ comp-name COMPNAME str "Component name (for scalable tests)"
    _ comp-uri COMPURI str "Component URI (for deploying component)"
    c connectors CONNECTORS #{str} "Set of connector names"
+   i insecure bool "Insecure connection to SlipStream"
    ; boot/test
    n namespaces NAMESPACE #{sym} "Set of namespace symbols of tests to run"
    e exclusions NAMESPACE #{sym} "Set of namespace symbols to exclude from tests"
@@ -55,6 +56,7 @@
                                           :app-uri app-uri
                                           :comp-name comp-name
                                           :comp-uri comp-uri
+                                          :insecure? insecure
                                           :connector-name c)
                         (btest/test :namespaces namespaces
                                     :exclusions exclusions

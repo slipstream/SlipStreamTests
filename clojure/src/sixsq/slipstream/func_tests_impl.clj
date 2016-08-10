@@ -143,6 +143,7 @@
    _ app-uri APPURI str "Application URI (for deploying app and scaling)"
    _ comp-name COMPNAME str "Component name (for scalable tests)"
    _ comp-uri COMPURI str "Component URI (for deploying component)"
+   _ insecure? bool "Insecure connection to SlipStream"
    _ connector-name CONNECTOR str "Connector name"]
   (fn middleware [next-task]
       (fn handler [fileset]
