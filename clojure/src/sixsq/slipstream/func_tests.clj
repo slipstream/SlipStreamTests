@@ -29,6 +29,7 @@
                          :app-uri (:app-uri opts)
                          :comp-name (:comp-name opts)
                          :comp-uri (:comp-uri opts)
+                         :insecure (:insecure opts)
                          :connector-name connector)
        (btest/test :namespaces (:namespaces opts)
                    :exclusions (:exclusions opts)
@@ -79,6 +80,7 @@
    _ comp-name COMPNAME str "Component name (for scalable tests)"
    _ comp-uri COMPURI str "Component URI (for deploying component)"
    c connectors CONNECTORS #{str} "Set of connector names. Provide --results-dir if more than one -c is given."
+   i insecure bool "Insecure connection to SlipStream"
    ; boot/test
    n namespaces NAMESPACE #{sym} "Set of namespace symbols of tests to run"
    e exclusions NAMESPACE #{sym} "Set of namespace symbols to exclude from tests"
