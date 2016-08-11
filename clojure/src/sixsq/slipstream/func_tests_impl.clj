@@ -43,7 +43,7 @@
 
 (defn results-loc
   [results-dir connector]
-  (let [rd (or results-dir ".")]
+  (let [rd (or results-dir (boot/get-env :target-path))]
     (if-not (s/blank? connector)
       (str (io/file rd connector))
       rd)))
@@ -128,12 +128,10 @@
               (update-test-meta-xml-str cname))]
     (spit filename s)))
 
-(defn test-file-copy-update
-  [srcfn results-dir connector-name]
+(defn test-file-copy
+  [srcfn results-dir]
   (let [dstfn (str (io/file results-dir (.getName (io/file srcfn))))]
-    (copy-file srcfn dstfn)
-    (if-not (empty? connector-name)
-      (update-test-meta dstfn connector-name))))
+    (copy-file srcfn dstfn)))
 
 (boot/deftask func-test-pre
   "Run before SlipStream functional tests."
@@ -156,10 +154,13 @@
    _ junit-output-to JUNITOUT str "Output directory for junit formatted reports for each namespace"]
   (fn middleware [next-task]
     (fn handler [fileset]
-      (if-not (s/blank? results-dir)
-        (do
-          (mkdirs results-dir)
+      (if-not (s/blank? connector-name)
+        (doseq [fn (find-res-xmls fileset junit-output-to)]
+          (update-test-meta fn connector-name)))
+      (if (or (not (s/blank? results-dir)) (not (s/blank? connector-name)))
+        (let [res-dir (results-loc results-dir connector-name)]
+          (mkdirs res-dir)
           (doseq [fn (find-res-xmls fileset junit-output-to)]
-            (test-file-copy-update fn results-dir connector-name))))
+            (test-file-copy fn res-dir))))
       (next-task fileset))))
 

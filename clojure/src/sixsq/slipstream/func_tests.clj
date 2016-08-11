@@ -14,6 +14,7 @@
 ;;
 (ns sixsq.slipstream.func-tests
   (:require [boot.core :as boot]
+            [clojure.string :as s]
             [sixsq.slipstream.func-tests-impl :as ft]
             [adzerk.boot-test :as btest]))
 
@@ -34,9 +35,9 @@
                    :filters (:filters opts)
                    :requires (:requires opts)
                    :junit-output-to (:junit-output-to opts))
-       (ft/func-test-post :results-dir (ft/results-loc (:results-dir opts) connector)
-                          :connector-name connector
-                          :junit-output-to (:junit-output-to opts)))))
+       (ft/func-test-post :results-dir (:results-dir opts)
+                          :junit-output-to (:junit-output-to opts)
+                          :connector-name connector))))
 
 (defn- gen-tasks
   [opts]
@@ -46,18 +47,29 @@
       (for [c (:connectors opts)]
         (pre-test-post opts c)))))
 
+(defn- check-opts
+  [opts usage]
+  (if (and (> (count (:connectors opts)) 1) (s/blank? (:results-dir opts)))
+    (do
+      (boot.util/fail "\nProvide --results-dir to store results from multiple connectors.\n" (usage))
+      (System/exit 1))))
+
 (boot/deftask func-test
   "SlipStream functional tests.
 
   Before running boot test task, writes configuration file for the tests.
 
-  After tests are run, the test results (XML) are copied to 'results-dir' (or
-  current directory).  If 'connector' is given, then test results are copied
-  to the directory under 'connector' sub-directory in 'results-dir'.
+  After tests are run, the test results (XML) are copied to 'results-dir' (if
+  provided).  If 'connectors' is given, then test results are copied
+  to the directory under 'connectors' sub-directory in 'results-dir' (if
+  provided).  Otherwise, the test results can be found under target directory.
 
-  For connector specific tests (i.e. when 'connector' is provided) the
+  If 'connectors' is given multiple times, 'results-dir' must be
+  provided as well.
+
+  For connector specific tests (i.e. when 'connectors' is provided) the
   metadata of the test suites in the test result files are renamed by
-  prepending 'connector' to the 'package' and 'classname' attributes.
+  prepending the connector name to the 'package' and 'classname' attributes.
   "
   [; func-test-pre
    s endpoint ENDPOINT str "SlipStream endpoint"
@@ -66,7 +78,7 @@
    _ app-uri APPURI str "Application URI (for deploying app and scaling)"
    _ comp-name COMPNAME str "Component name (for scalable tests)"
    _ comp-uri COMPURI str "Component URI (for deploying component)"
-   c connectors CONNECTORS #{str} "Set of connector names"
+   c connectors CONNECTORS #{str} "Set of connector names. Provide --results-dir if more than one -c is given."
    ; boot/test
    n namespaces NAMESPACE #{sym} "Set of namespace symbols of tests to run"
    e exclusions NAMESPACE #{sym} "Set of namespace symbols to exclude from tests"
@@ -74,6 +86,7 @@
    r requires   REQUIRES  #{sym} "Extra namespaces to pre-load into the pool of test pods for speed"
    j junit-output-to JUNITOUT str "Output directory for junit formatted reports for each namespace"
    ; func-test-post
-   d results-dir RESULTSDIR str "Output directory for test results"]
-   (apply comp (gen-tasks *opts*)))
+   d results-dir RESULTSDIR str "Output directory for test results. Required if more than one -c is provided."]
+  (check-opts *opts* *usage*)
+  (apply comp (gen-tasks *opts*)))
 
