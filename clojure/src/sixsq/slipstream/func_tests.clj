@@ -73,7 +73,7 @@
   prepending the connector name to the 'package' and 'classname' attributes.
   "
   [; func-test-pre
-   e endpoint ENDPOINT str "SlipStream endpoint"
+   s endpoint ENDPOINT str "SlipStream endpoint"
    u username USERNAME str "SlipStream username"
    p password PASSWORD str "SlipStream password"
    _ app-uri APPURI str "Application URI (for deploying app and scaling)"
