@@ -29,7 +29,7 @@
                          :app-uri (:app-uri opts)
                          :comp-name (:comp-name opts)
                          :comp-uri (:comp-uri opts)
-                         :insecure (:insecure opts)
+                         :insecure? (:insecure opts)
                          :connector-name connector)
        (btest/test :namespaces (:namespaces opts)
                    :exclusions (:exclusions opts)
@@ -73,7 +73,7 @@
   prepending the connector name to the 'package' and 'classname' attributes.
   "
   [; func-test-pre
-   s endpoint ENDPOINT str "SlipStream endpoint"
+   e endpoint ENDPOINT str "SlipStream endpoint"
    u username USERNAME str "SlipStream username"
    p password PASSWORD str "SlipStream password"
    _ app-uri APPURI str "Application URI (for deploying app and scaling)"
