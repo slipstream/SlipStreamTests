@@ -29,7 +29,7 @@
 (def config (get-config))
 (def username (:username config))
 (def password (:password config))
-(def serviceurl (:serviceurl config))
+(def endpoint (:endpoint config))
 (def comp-name (:comp-name config))
 (def app-uri (:app-uri config))
 (def connector-name (:connector-name config))
@@ -48,7 +48,7 @@
 (deftest test-deploy-terminate
 
   (testing "Authenticate: get and validate cookie."
-    (let [cookie (a/login! username password (a/to-login-url serviceurl))]
+    (let [cookie (a/login! username password (a/to-login-url endpoint))]
       (is (not (nil? cookie)))
       (is (starts-with? cookie "com.sixsq.slipstream.cookie"))
       (is (.endsWith cookie "Path=/"))))

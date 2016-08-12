@@ -1,5 +1,5 @@
 BOOT = boot
-BOOT_TEST = $(BOOT) --no-colors test
+BOOT_TEST = $(BOOT) --no-colors func-test
 
 all: clojure-test
 test: all
@@ -9,33 +9,27 @@ clojure-test-debug:
 
 clojure-test:
 	cd clojure && \
-		{ export TIMBRE_NS_BLACKLIST='["kvlt.*"]'; \
-		  $(BOOT_TEST); }
+		$(BOOT_TEST)
 
 test-clojure-deps:
 	cd clojure && \
-		{ export TIMBRE_NS_BLACKLIST='["kvlt.*"]'; \
-		   $(BOOT) show -d; }
+		$(BOOT) show -d
 
 test-auth:
 	cd clojure && \
-		{ export TIMBRE_NS_BLACKLIST='["kvlt.*"]'; \
-		  $(BOOT_TEST) -n sixsq.slipstream.authn-test; }
+		$(BOOT_TEST) -n sixsq.slipstream.authn-test $(TESTOPTS)
 
 test-run-comp:
 	cd clojure && \
-		{ export TIMBRE_NS_BLACKLIST='["kvlt.*"]'; \
-		  $(BOOT_TEST) -n sixsq.slipstream.run-comp-test; }
+		$(BOOT_TEST) -n sixsq.slipstream.run-comp-test $(TESTOPTS)
 
 test-run-app:
 	cd clojure && \
-		{ export TIMBRE_NS_BLACKLIST='["kvlt.*"]'; \
-		  $(BOOT_TEST) -n sixsq.slipstream.run-app-test; }
+		$(BOOT_TEST) -n sixsq.slipstream.run-app-test $(TESTOPTS)
 
 test-run-app-scale:
 	cd clojure && \
-		{ export TIMBRE_NS_BLACKLIST='["kvlt.*"]'; \
-		  $(BOOT_TEST) -n sixsq.slipstream.run-app-scale-test; }
+	    $(BOOT_TEST) -n sixsq.slipstream.run-app-scale-test $(TESTOPTS)
 
 clean:
 	rm -rf clojure/target

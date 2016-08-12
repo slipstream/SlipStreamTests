@@ -24,13 +24,13 @@
 (def config (get-config))
 (def username (:username config))
 (def password (:password config))
-(def serviceurl (:serviceurl config))
+(def endpoint (:endpoint config))
 (def insecure (:insecure? config))
 
 ;; TODO: use cookie handling library to test content of cookie.
 (deftest test-authn
   (let [cookie (a/with-context {:insecure? insecure}
-                 (a/login! username password (a/to-login-url serviceurl)))]
+                 (a/login! username password (a/to-login-url endpoint)))]
     (is (not (nil? cookie)))
     (is (starts-with? cookie "com.sixsq.slipstream.cookie"))
     (is (.endsWith cookie "Path=/"))))
