@@ -15,7 +15,9 @@
 (ns sixsq.slipstream.authn-test
   (:require [clojure.test :refer :all]
             [clojure.test.junit :refer :all]
-            [clojure.string :refer [starts-with?]]
+            [clojure.string :as s]
+            [clj-http.cookies :refer [decode-cookie]]
+            [clj-jwt.core  :refer [str->jwt]]
             [sixsq.slipstream.test-base :refer [get-config http-quiet!]]
             [sixsq.slipstream.client.api.authn :as a]))
 
@@ -27,11 +29,22 @@
 (def endpoint (:endpoint config))
 (def insecure (:insecure? config))
 
-;; TODO: use cookie handling library to test content of cookie.
 (deftest test-authn
   (let [cookie (a/with-context {:insecure? insecure}
                  (a/login! username password (a/to-login-url endpoint)))]
     (is (not (nil? cookie)))
-    (is (starts-with? cookie "com.sixsq.slipstream.cookie"))
-    (is (.endsWith cookie "Path=/"))))
+    (let [cookie-decoded (decode-cookie cookie)]
+      (is (= 2 (count cookie-decoded)))
+        (let [[cname cmeta] cookie-decoded]
+          (is (= "com.sixsq.slipstream.cookie" cname))
+          (is (= "/" (:path cmeta)))
+          (is (s/starts-with? (:value cmeta) "token="))
+          (let [token (-> (:value cmeta)
+                          (s/replace #"^token=" "")
+                          str->jwt)]
+            (is (contains? token :claims))
+            (let [claims (:claims token)]
+              (is (= username (:com.sixsq.identifier claims)))
+              (is (not (empty? (:com.sixsq.roles claims))))
+              (is (< (quot (System/currentTimeMillis) 1000) (:exp claims)))))))))
 
