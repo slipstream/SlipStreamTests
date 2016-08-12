@@ -18,6 +18,17 @@
             [sixsq.slipstream.func-tests-impl :as ft]
             [adzerk.boot-test :as btest]))
 
+(defn- test-task
+  [opts]
+  (let [ps [:namespaces (:namespaces opts)
+            :exclusions (:exclusions opts)
+            :filters (:filters opts)
+            :requires (:requires opts)
+            :junit-output-to (:junit-output-to opts)]]
+    (if (:fail opts)
+      (apply btest/test ps)
+      (apply btest/run-tests ps))))
+
 (defn- pre-test-post
   ([opts]
     (pre-test-post opts nil))
@@ -31,11 +42,7 @@
                          :comp-uri (:comp-uri opts)
                          :insecure? (:insecure opts)
                          :connector-name connector)
-       (btest/test :namespaces (:namespaces opts)
-                   :exclusions (:exclusions opts)
-                   :filters (:filters opts)
-                   :requires (:requires opts)
-                   :junit-output-to (:junit-output-to opts))
+       (test-task opts)
        (ft/func-test-post :results-dir (:results-dir opts)
                           :junit-output-to (:junit-output-to opts)
                           :connector-name connector))))
@@ -81,6 +88,7 @@
    _ comp-uri COMPURI str "Component URI (for deploying component)"
    c connectors CONNECTORS #{str} "Set of connector names. Provide --results-dir if more than one -c is given."
    i insecure bool "Insecure connection to SlipStream"
+   _ fail bool "Exit with an error on the first failed test.  Default: continue to run all tests."
    ; boot/test
    n namespaces NAMESPACE #{sym} "Set of namespace symbols of tests to run"
    e exclusions NAMESPACE #{sym} "Set of namespace symbols to exclude from tests"
