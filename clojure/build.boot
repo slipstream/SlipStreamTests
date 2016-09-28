@@ -1,4 +1,4 @@
-(def +version+ "3.13-SNAPSHOT")
+(def +version+ "3.14-SNAPSHOT")
 
 (set-env!
   :project 'com.sixsq.slipstream/SlipStreamTests-clj
@@ -51,4 +51,3 @@
        :version (get-env :version)}
   test test-opts
   func-test test-opts)
-
