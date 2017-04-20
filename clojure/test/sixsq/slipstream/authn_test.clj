@@ -44,7 +44,7 @@
                           str->jwt)]
             (is (contains? token :claims))
             (let [claims (:claims token)]
-              (is (= username (:com.sixsq.identifier claims)))
-              (is (not (empty? (:com.sixsq.roles claims))))
+              (is (= username (:username claims)))
+              (is (not (empty? (:roles claims))))
               (is (< (quot (System/currentTimeMillis) 1000) (:exp claims)))))))))
 
