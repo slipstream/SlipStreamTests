@@ -52,7 +52,7 @@
     (let [cookie (a/login! username password (a/to-login-url endpoint))]
       (is (not (nil? cookie)))
       (is (starts-with? cookie "com.sixsq.slipstream.cookie"))
-      (is (.endsWith cookie "Path=/"))))
+      (is (re-matches #".*Path=/.*" cookie))))
 
   (testing "Start scalable run."
     (let [run-url (p/deploy app-uri deploy-params-map)]
