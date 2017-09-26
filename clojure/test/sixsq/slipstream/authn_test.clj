@@ -19,7 +19,8 @@
             [clj-http.cookies :refer [decode-cookie]]
             [clj-jwt.core  :refer [str->jwt]]
             [sixsq.slipstream.test-base :refer [get-config http-quiet!]]
-            [sixsq.slipstream.client.api.authn :as a]))
+            [sixsq.slipstream.client.api.authn :as authn]
+            [sixsq.slipstream.client.sync :as sync]))
 
 (http-quiet!)
 
@@ -30,21 +31,12 @@
 (def insecure (:insecure? config))
 
 (deftest test-authn
-  (let [cookie (a/with-context {:insecure? insecure}
-                 (a/login! username password (a/to-login-url endpoint)))]
-    (is (not (nil? cookie)))
-    (let [cookie-decoded (decode-cookie cookie)]
-      (is (= 2 (count cookie-decoded)))
-        (let [[cname cmeta] cookie-decoded]
-          (is (= "com.sixsq.slipstream.cookie" cname))
-          (is (= "/" (:path cmeta)))
-          (is (s/starts-with? (:value cmeta) "token="))
-          (let [token (-> (:value cmeta)
-                          (s/replace #"^token=" "")
-                          str->jwt)]
-            (is (contains? token :claims))
-            (let [claims (:claims token)]
-              (is (= username (:username claims)))
-              (is (not (empty? (:roles claims))))
-              (is (< (quot (System/currentTimeMillis) 1000) (:exp claims)))))))))
-
+  (let [client-sync (sync/instance (str endpoint "/api/cloud-entry-point"))
+        session     (authn/login client-sync {:href     "session-template/internal"
+                                              :username username
+                                              :password password}
+                                 {:insecure? insecure})]
+    (is (= 201 (:status session)))
+    (is (authn/authenticated? client-sync))
+    (is (= 200 (:status (authn/logout client-sync))))
+    (is (not (authn/authenticated? client-sync)))))

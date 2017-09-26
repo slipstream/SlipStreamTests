@@ -18,7 +18,7 @@
     [clojure.java.io :as io]
     [taoensso.timbre :as log]
     [cemerick.url :refer [url]]
-    [sixsq.slipstream.client.api.lib.run :as lr]
+    [sixsq.slipstream.client.run :as lr]
     [sixsq.slipstream.client.api.authn :as a])
   (:import (java.util UUID)
            (java.net MalformedURLException)))

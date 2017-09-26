@@ -1,0 +1,8 @@
+{
+ :username "konstan"
+ :password "a1s2d3f4g5"
+ :serviceurl "https://nuv.la"
+ :app-uri "konstan/scale/scale-test-dpl"
+ :comp-name "testvm"
+ :connector-name "ec2-eu-west"
+ }
