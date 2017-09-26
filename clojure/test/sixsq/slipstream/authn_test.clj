@@ -31,11 +31,11 @@
 (def insecure (:insecure? config))
 
 (deftest test-authn
-  (let [client-sync (sync/instance (str endpoint "/api/cloud-entry-point"))
+  (let [client-sync (sync/instance (str endpoint "/api/cloud-entry-point")
+                                   {:insecure? insecure})
         session     (authn/login client-sync {:href     "session-template/internal"
                                               :username username
-                                              :password password}
-                                 {:insecure? insecure})]
+                                              :password password})]
     (is (= 201 (:status session)))
     (is (authn/authenticated? client-sync))
     (is (= 200 (:status (authn/logout client-sync))))
