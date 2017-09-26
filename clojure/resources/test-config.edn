@@ -1,9 +1,15 @@
 {
  :username "CHANGEME_USER"
  :password "CHANGEME_PASS"
- :endpoint "CHANGEME_ENDPOINT"
+ :serviceurl "CHANGEME_SERVICEURL"
+
+ :connector-name "CHANGEME_CONNECTOR_NAME"
+
+ ;; For component deployment tests.
+ :comp-uri "CHANGEME_COMP_URI"
+
+ ;; For application deployment tests.
  :app-uri "CHANGEME_APP_URI"
  :comp-name "CHANGEME_COMP_NAME"
- :connector-name "CHANGEME_CONNECTOR_NAME"
  }
 
