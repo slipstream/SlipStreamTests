@@ -27,7 +27,7 @@
                    [clj-http "2.2.0"]
                    [clj-jwt "0.1.1"]
                    [com.cemerick/url nil :scope "test"]
-                   [com.sixsq.slipstream/SlipStreamClientAPI-jar :version :scope "test"]
+                   [com.sixsq.slipstream/SlipStreamClojureAPI-cimi :version :scope "test"]
 
                    [adzerk/boot-test]
                    [adzerk/boot-reload]
