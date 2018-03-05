@@ -20,9 +20,12 @@
                                                 fixture-terminate set-run-uuid
                                                 is-uuid is-url run-uuid-from-run-url
                                                 inst-names-range]]
-            [sixsq.slipstream.client.api.authn :as a]
-            [sixsq.slipstream.client.api.lib.app :as p]
-            [sixsq.slipstream.client.api.run :as r]))
+            [sixsq.slipstream.client.api.authn :as authn]
+            [sixsq.slipstream.client.sync :as sync]
+            [sixsq.slipstream.client.run :as r]
+            [sixsq.slipstream.client.run-impl.lib.app :as p]
+            [sixsq.slipstream.client.run-impl.lib.run]
+            [sixsq.slipstream.client.api.deprecated-authn :as a]))
 
 (http-quiet!)
 
@@ -35,8 +38,6 @@
 (def connector-name (:connector-name config))
 (def insecure (:insecure? config))
 
-(a/set-context! {:insecure? insecure})
-
 (def deploy-params-map
   (-> {}
       (cond-> connector-name (assoc (str comp-name ":cloudservice") connector-name))))
@@ -47,11 +48,18 @@
 ;; Tests.
 (deftest test-deploy-terminate
 
-  (testing "Authenticate: get and validate cookie."
-    (let [cookie (a/login! username password (a/to-login-url endpoint))]
-      (is (not (nil? cookie)))
-      (is (starts-with? cookie "com.sixsq.slipstream.cookie"))
-      (is (re-matches #".*Path=/.*" cookie))))
+  (testing "Authenticate."
+    (let [client-sync (sync/instance (str endpoint "/api/cloud-entry-point"))
+          session     (authn/login client-sync {:href     "session-template/internal"
+                                                :username username
+                                                :password password}
+                                   {:insecure? insecure})]
+      (is (= 201 (:status session)))
+      (is (authn/authenticated? client-sync))
+      (is (= 200 (:status (authn/logout client-sync))))
+      (is (not (authn/authenticated? client-sync)))))
+
+  (a/login! username password (str endpoint "/" a/login-resource))
 
   (testing "Deploy application."
     (let [run-url (p/deploy app-uri deploy-params-map)]
@@ -59,13 +67,14 @@
       (let [run-uuid (run-uuid-from-run-url run-url)]
         (is (is-uuid run-uuid))
         (r/contextualize! (assoc a/*context* :diid run-uuid))
-        (set-run-uuid run-uuid)))
+        (set-run-uuid run-uuid))))
+
+  (testing "Validate deployment."
     (is (false? (r/scalable?)))
     (is (= 1 (r/get-multiplicity comp-name)))
     (is (true? (with-dont-ignore-abort (r/wait-ready)))))
 
   (testing "Terminate application."
     (is (= 204 (:status (r/terminate))))
-    ;; TODO:
-    #_(is (true? (r/wait-done)))))
+    (is (true? (#'sixsq.slipstream.client.run-impl.lib.run/wait-state (r/run-uuid) "Done")))))
 
