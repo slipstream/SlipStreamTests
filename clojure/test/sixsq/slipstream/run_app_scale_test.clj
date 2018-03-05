@@ -20,9 +20,10 @@
                                                 fixture-terminate set-run-uuid
                                                 is-uuid is-url run-uuid-from-run-url
                                                 inst-names-range]]
-            [sixsq.slipstream.client.api.authn :as a]
-            [sixsq.slipstream.client.api.lib.app :as p]
-            [sixsq.slipstream.client.api.run :as r]))
+            [sixsq.slipstream.client.run-impl.lib.app :as p]
+            [sixsq.slipstream.client.run :as r]
+            [sixsq.slipstream.client.run-impl.lib.run]
+            [sixsq.slipstream.client.api.deprecated-authn :as a]))
 
 (http-quiet!)
 
@@ -34,8 +35,6 @@
 (def comp-name (:comp-name config))
 (def connector-name (:connector-name config))
 (def insecure (:insecure? config))
-
-(a/set-context! {:insecure? insecure})
 
 (def deploy-params-map
   (-> {:scalable                       true
@@ -83,5 +82,4 @@
 
   (testing "Terminate deployment."
     (is (= 204 (:status (r/terminate))))
-    #_(is (true? (r/wait-done)))))
-
+    (is (true? (#'sixsq.slipstream.client.run-impl.lib.run/wait-state (r/run-uuid) "Done")))))
