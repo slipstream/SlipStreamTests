@@ -15,9 +15,7 @@
 (ns sixsq.slipstream.authn-test
   (:require [clojure.test :refer :all]
             [clojure.test.junit :refer :all]
-            [clojure.string :as s]
             [clj-http.cookies :refer [decode-cookie]]
-            [clj-jwt.core  :refer [str->jwt]]
             [sixsq.slipstream.test-base :refer [get-config http-quiet!]]
             [sixsq.slipstream.client.api.authn :as authn]
             [sixsq.slipstream.client.sync :as sync]))

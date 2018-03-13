@@ -20,8 +20,6 @@
                                                 fixture-terminate set-run-uuid
                                                 is-uuid is-url run-uuid-from-run-url
                                                 inst-names-range]]
-            [sixsq.slipstream.client.api.authn :as authn]
-            [sixsq.slipstream.client.sync :as sync]
             [sixsq.slipstream.client.run-impl.lib.app :as p]
             [sixsq.slipstream.client.run :as r]
             [sixsq.slipstream.client.run-impl.lib.run]
@@ -46,18 +44,10 @@
 ;;
 ;; Tests.
 (deftest test-component-deploy-terminate
-  (testing "Authenticate."
-    (let [client-sync (sync/instance (str endpoint "/api/cloud-entry-point"))
-          session     (authn/login client-sync {:href     "session-template/internal"
-                                                :username username
-                                                :password password}
-                                   {:insecure? insecure})]
-      (is (= 201 (:status session)))
-      (is (authn/authenticated? client-sync))
-      (is (= 200 (:status (authn/logout client-sync))))
-      (is (not (authn/authenticated? client-sync)))))
-
-  (a/login! username password (str endpoint "/" a/login-resource))
+  (testing "Authenticate"
+    (a/set-context! {:serviceurl endpoint :insecure? insecure})
+    (a/login! username password (str endpoint "/" a/login-resource))
+    (is (:cookie a/*context*)))
 
   (testing "Deploy component."
     (let [run-url (p/deploy-comp comp-uri deploy-params-map)]

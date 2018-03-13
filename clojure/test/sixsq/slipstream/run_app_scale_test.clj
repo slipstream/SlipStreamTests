@@ -46,12 +46,10 @@
 ;;
 ;; Tests.
 (deftest test-deploy-scale-terminate
-
-  (testing "Authenticate: get and validate cookie."
-    (let [cookie (a/login! username password (a/to-login-url endpoint))]
-      (is (not (nil? cookie)))
-      (is (starts-with? cookie "com.sixsq.slipstream.cookie"))
-      (is (re-matches #".*Path=/.*" cookie))))
+  (testing "Authenticate"
+    (a/set-context! {:serviceurl endpoint :insecure? insecure})
+    (a/login! username password (str endpoint "/" a/login-resource))
+    (is (:cookie a/*context*)))
 
   (testing "Start scalable run."
     (let [run-url (p/deploy app-uri deploy-params-map)]
