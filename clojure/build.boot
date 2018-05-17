@@ -1,4 +1,4 @@
-(def +version+ "3.50")
+(def +version+ "3.52-SNAPSHOT")
 
 (set-env!
   :project 'com.sixsq.slipstream/SlipStreamTests-clj
