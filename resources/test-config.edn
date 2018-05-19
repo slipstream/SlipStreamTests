@@ -1,0 +1,13 @@
+{
+ :endpoint "https://nuv.la"
+ :username "your-username"
+ :password "your-password"
+
+ :connector-name "exoscale-ch-gva"
+
+ :comp-uri "examples/tutorials/service-testing/apache"
+ :app-uri "examples/tutorials/service-testing/system"
+ :comp-name "testclient"
+
+ :results-dir "your-directory"
+}
