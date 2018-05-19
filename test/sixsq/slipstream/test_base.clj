@@ -14,14 +14,15 @@
 ;;
 (ns sixsq.slipstream.test-base
   (:require
+    [cemerick.url :refer [url]]
     [clojure.edn :as edn]
     [clojure.java.io :as io]
-    [taoensso.timbre :as log]
-    [cemerick.url :refer [url]]
+    [sixsq.slipstream.client.api.deprecated-authn :as a]
     [sixsq.slipstream.client.run-impl.lib.run :as lr]
-    [sixsq.slipstream.client.api.deprecated-authn :as a])
-  (:import (java.util UUID)
-           (java.net MalformedURLException)))
+    [taoensso.timbre :as log])
+  (:import
+    (java.net MalformedURLException)
+    (java.util UUID)))
 
 
 ;; move to sixsq.slipstream.client.api.utils.utils
@@ -33,6 +34,8 @@
       true)
     (catch IllegalArgumentException e
       false)))
+
+
 (defn is-url
   [u]
   (try
@@ -53,7 +56,7 @@
       last
       clojure.string/trim))
 
-;; configuration releated.
+;; configuration related.
 (def config-fn "test-config.edn")
 (def config-path
   (if-let [f (io/resource config-fn)] (.getPath f)))
