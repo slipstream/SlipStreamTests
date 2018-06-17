@@ -13,7 +13,7 @@
   :plugins [[lein-parent "0.3.2"]
             [test2junit "1.4.0"]]
 
-  :parent-project {:coords  [sixsq/slipstream-parent "5.3.6"]
+  :parent-project {:coords  [sixsq/slipstream-parent "5.3.7"]
                    :inherit [:plugins
                              :min-lein-version
                              :managed-dependencies
