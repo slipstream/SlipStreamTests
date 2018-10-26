@@ -1,6 +1,6 @@
-(def +version+ "3.62")
+(def +version+ "3.63-SNAPSHOT")
 
-(defproject com.sixsq.slipstream/SlipStreamTests-clj "3.62"
+(defproject com.sixsq.slipstream/SlipStreamTests-clj "3.63-SNAPSHOT"
 
   :description "SlipStream functional tests"
 
